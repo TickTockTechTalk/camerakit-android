@@ -24,3 +24,7 @@ dependencies {
     compile 'com.android.support:exifinterface:27.0.2'
     implementation 'com.google.android.gms:play-services-vision:11.6.2'
 }
+
+repositories {
+    google()
+}
