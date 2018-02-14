@@ -34,6 +34,7 @@ public class SurfaceViewPreview extends PreviewImpl {
 
 
         mSurfaceView = mContainer.findViewById(R.id.surface_view);
+        mSurfaceView.setZOrderMediaOverlay(true);
 
         final SurfaceHolder holder = mSurfaceView.getHolder();
 
