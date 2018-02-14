@@ -46,7 +46,7 @@ abstract class CameraImpl {
         void videoCaptured(File file);
     }
 
-    abstract void stopVideo();
+    abstract boolean stopVideo();
 
     abstract Size getCaptureResolution();
     abstract Size getVideoResolution();
