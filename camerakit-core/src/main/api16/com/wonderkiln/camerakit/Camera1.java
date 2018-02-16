@@ -809,9 +809,6 @@ public class Camera1 extends CameraImpl {
                 );
             }
 
-            // Reverted changes in https://github.com/CameraKit/camerakit-android/commit/5875fded1b7bdac1bcc049fcc3accff4c0ac5cbf
-            // to fix preview getting stretched
-
             mCameraParameters.setPreviewSize(
                     invertPreviewSizes ? getPreviewResolution().getHeight() : getPreviewResolution().getWidth(),
                     invertPreviewSizes ? getPreviewResolution().getWidth() : getPreviewResolution().getHeight()
