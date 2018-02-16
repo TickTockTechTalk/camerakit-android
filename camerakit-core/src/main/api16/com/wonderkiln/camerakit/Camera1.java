@@ -36,7 +36,7 @@ import static com.wonderkiln.camerakit.CameraKit.Constants.METHOD_STILL;
 @SuppressWarnings("deprecation")
 public class Camera1 extends CameraImpl {
 
-    private static final String TAG = Camera1.class.getSimpleName();
+    private static final String TAG = Camera1.class.getName();
 
     private static final int FOCUS_AREA_SIZE_DEFAULT = 300;
     private static final int FOCUS_METERING_AREA_WEIGHT_DEFAULT = 1000;
@@ -286,7 +286,7 @@ public class Camera1 extends CameraImpl {
             if (zoomFactor <= 1) {
                 mZoom = 1;
             } else {
-                mZoom= zoomFactor;
+                mZoom = zoomFactor;
             }
 
             if (mCameraParameters != null && mCameraParameters.isZoomSupported()) {
@@ -499,7 +499,8 @@ public class Camera1 extends CameraImpl {
     }
 
     @Override
-    void stopVideo() {
+    boolean stopVideo() {
+        boolean isVideoRecorded = false;
         synchronized (mCameraLock) {
             if (mRecording) {
                 File videoFile = getVideoFile();
@@ -510,8 +511,10 @@ public class Camera1 extends CameraImpl {
                         mVideoCallback.videoCaptured(videoFile);
                         mVideoCallback = null;
                     }
+                    isVideoRecorded = true;
                 } catch (RuntimeException e) {
                     videoFile.delete();
+                    Log.e(TAG, e.getMessage());
                 }
 
                 releaseMediaRecorder();
@@ -521,6 +524,7 @@ public class Camera1 extends CameraImpl {
             stop();
             start();
         }
+        return isVideoRecorded;
     }
 
     @Override
@@ -785,6 +789,7 @@ public class Camera1 extends CameraImpl {
     }
 
     private void adjustCameraParameters(int currentTry) {
+        boolean invertPreviewSizes = (mCameraInfo.orientation + mDeviceOrientation) % 180 == 90;
         boolean haveToReadjust = false;
         Camera.Parameters resolutionLess = mCamera.getParameters();
 
@@ -795,9 +800,12 @@ public class Camera1 extends CameraImpl {
                     mCameraParameters.getPreviewFormat()
             );
 
+            // Reverted changes in https://github.com/CameraKit/camerakit-android/commit/5875fded1b7bdac1bcc049fcc3accff4c0ac5cbf
+            // to fix preview getting stretched
+
             mCameraParameters.setPreviewSize(
-                    getPreviewResolution().getWidth(),
-                    getPreviewResolution().getHeight()
+                    invertPreviewSizes ? getPreviewResolution().getHeight() : getPreviewResolution().getWidth(),
+                    invertPreviewSizes ? getPreviewResolution().getWidth() : getPreviewResolution().getHeight()
             );
 
             try {

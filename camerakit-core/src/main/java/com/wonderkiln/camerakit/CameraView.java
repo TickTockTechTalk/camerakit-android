@@ -1,15 +1,5 @@
 package com.wonderkiln.camerakit;
 
-import static com.wonderkiln.camerakit.CameraKit.Constants.FACING_BACK;
-import static com.wonderkiln.camerakit.CameraKit.Constants.FACING_FRONT;
-import static com.wonderkiln.camerakit.CameraKit.Constants.FLASH_AUTO;
-import static com.wonderkiln.camerakit.CameraKit.Constants.FLASH_OFF;
-import static com.wonderkiln.camerakit.CameraKit.Constants.FLASH_ON;
-import static com.wonderkiln.camerakit.CameraKit.Constants.FLASH_TORCH;
-import static com.wonderkiln.camerakit.CameraKit.Constants.PERMISSIONS_LAZY;
-import static com.wonderkiln.camerakit.CameraKit.Constants.PERMISSIONS_PICTURE;
-import static com.wonderkiln.camerakit.CameraKit.Constants.PERMISSIONS_STRICT;
-
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
@@ -37,6 +27,16 @@ import com.wonderkiln.camerakit.core.R;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.wonderkiln.camerakit.CameraKit.Constants.FACING_BACK;
+import static com.wonderkiln.camerakit.CameraKit.Constants.FACING_FRONT;
+import static com.wonderkiln.camerakit.CameraKit.Constants.FLASH_AUTO;
+import static com.wonderkiln.camerakit.CameraKit.Constants.FLASH_OFF;
+import static com.wonderkiln.camerakit.CameraKit.Constants.FLASH_ON;
+import static com.wonderkiln.camerakit.CameraKit.Constants.FLASH_TORCH;
+import static com.wonderkiln.camerakit.CameraKit.Constants.PERMISSIONS_LAZY;
+import static com.wonderkiln.camerakit.CameraKit.Constants.PERMISSIONS_PICTURE;
+import static com.wonderkiln.camerakit.CameraKit.Constants.PERMISSIONS_STRICT;
 
 public class CameraView extends CameraViewLayout {
 
@@ -77,6 +77,7 @@ public class CameraView extends CameraViewLayout {
     private boolean mLockVideoAspectRatio;
     private boolean mCropOutput;
     private boolean mDoubleTapToToggleFacing;
+    private boolean mDisableAutoRotate;
 
     private boolean mAdjustViewBounds;
 
@@ -122,6 +123,7 @@ public class CameraView extends CameraViewLayout {
                 mDoubleTapToToggleFacing = a.getBoolean(R.styleable.CameraView_ckDoubleTapToToggleFacing, CameraKit.Defaults.DEFAULT_DOUBLE_TAP_TO_TOGGLE_FACING);
                 mLockVideoAspectRatio = a.getBoolean(R.styleable.CameraView_ckLockVideoAspectRatio, false);
                 mAdjustViewBounds = a.getBoolean(R.styleable.CameraView_android_adjustViewBounds, CameraKit.Defaults.DEFAULT_ADJUST_VIEW_BOUNDS);
+                mDisableAutoRotate = a.getBoolean(R.styleable.CameraView_ckDisableAutoRotate, false);
             } finally {
                 a.recycle();
             }
@@ -156,6 +158,9 @@ public class CameraView extends CameraViewLayout {
             mDisplayOrientationDetector = new DisplayOrientationDetector(context) {
                 @Override
                 public void onDisplayOrDeviceOrientationChanged(int displayOrientation, int deviceOrientation) {
+                    if (mDisableAutoRotate) {
+                        return;
+                    }
                     mCameraImpl.setDisplayAndDeviceOrientation(displayOrientation, deviceOrientation);
                     mPreviewImpl.setDisplayOrientation(displayOrientation);
                 }
@@ -497,8 +502,8 @@ public class CameraView extends CameraViewLayout {
         });
     }
 
-    public void stopVideo() {
-        mCameraImpl.stopVideo();
+    public boolean stopVideo() {
+        return mCameraImpl.stopVideo();
     }
 
     public Size getPreviewSize() {
