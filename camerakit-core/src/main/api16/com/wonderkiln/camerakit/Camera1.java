@@ -928,6 +928,8 @@ public class Camera1 extends CameraImpl {
             CamcorderProfile profile = getCamcorderProfile(mVideoQuality);
             mMediaRecorder.setProfile(profile);
 
+            mMediaRecorder.setVideoSize(getVideoResolution().getWidth(), getVideoResolution().getHeight());
+
             if (videoFile == null) videoFile = getVideoFile();
             if (videoFile == null) {
                 return false;
