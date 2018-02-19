@@ -507,7 +507,7 @@ public class Camera1 extends CameraImpl {
 
                 try {
                     mMediaRecorder.stop();
-                    if (this.mVideoCallback != null) {
+                    if (this.mVideoCallback != null && !isPaused) {
                         mVideoCallback.videoCaptured(videoFile);
                         mVideoCallback = null;
                     }
