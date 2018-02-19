@@ -46,7 +46,7 @@ abstract class CameraImpl {
         void videoCaptured(File file);
     }
 
-    abstract boolean stopVideo();
+    abstract boolean stopVideo(boolean isPaused);
 
     abstract Size getCaptureResolution();
     abstract Size getVideoResolution();
@@ -57,4 +57,5 @@ abstract class CameraImpl {
     @Nullable
     abstract CameraProperties getCameraProperties();
 
+    abstract boolean isRecording();
 }

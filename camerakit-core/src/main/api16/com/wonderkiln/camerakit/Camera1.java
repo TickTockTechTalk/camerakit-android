@@ -499,7 +499,7 @@ public class Camera1 extends CameraImpl {
     }
 
     @Override
-    boolean stopVideo() {
+    boolean stopVideo(boolean isPaused) {
         boolean isVideoRecorded = false;
         synchronized (mCameraLock) {
             if (mRecording) {
@@ -522,7 +522,9 @@ public class Camera1 extends CameraImpl {
             }
 
             stop();
-            start();
+            if (!isPaused) {
+                start();
+            }
         }
         return isVideoRecorded;
     }
@@ -658,6 +660,11 @@ public class Camera1 extends CameraImpl {
     @Override
     CameraProperties getCameraProperties() {
         return mCameraProperties;
+    }
+
+    @Override
+    boolean isRecording() {
+        return mRecording;
     }
 
     // Internal:

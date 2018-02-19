@@ -504,7 +504,11 @@ public class CameraView extends CameraViewLayout {
     }
 
     public boolean stopVideo() {
-        return mCameraImpl.stopVideo();
+        return stopVideo(false);
+    }
+
+    public boolean stopVideo(boolean isPaused) {
+        return mCameraImpl.stopVideo(isPaused);
     }
 
     public Size getPreviewSize() {
@@ -543,6 +547,10 @@ public class CameraView extends CameraViewLayout {
 
     public void bindCameraKitListener(Object object) {
         mEventDispatcher.addBinding(object);
+    }
+
+    public boolean isRecording() {
+        return mCameraImpl != null && mCameraImpl.isRecording();
     }
 
 }
