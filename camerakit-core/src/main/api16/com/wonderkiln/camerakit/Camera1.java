@@ -109,6 +109,7 @@ public class Camera1 extends CameraImpl {
                         mCamera.startPreview();
                         mShowingPreview = true;
                     }
+                    mEventDispatcher.dispatch(new CameraKitEvent(CameraKitEvent.TYPE_PREVIEW_READY));
                 }
             }
         });
@@ -128,6 +129,7 @@ public class Camera1 extends CameraImpl {
             mCamera.startPreview();
             mShowingPreview = true;
         }
+        mEventDispatcher.dispatch(new CameraKitEvent(CameraKitEvent.TYPE_CAMERA_READY));
     }
 
     @Override
