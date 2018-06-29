@@ -109,6 +109,7 @@ public class Camera1 extends CameraImpl {
                         mCamera.startPreview();
                         mShowingPreview = true;
                     }
+                    mEventDispatcher.dispatch(new CameraKitEvent(CameraKitEvent.TYPE_PREVIEW_CHANGED));
                 }
             }
         });
@@ -934,7 +935,10 @@ public class Camera1 extends CameraImpl {
             CamcorderProfile profile = getCamcorderProfile(mVideoQuality);
             mMediaRecorder.setProfile(profile);
 
-            mMediaRecorder.setVideoSize(getVideoResolution().getWidth(), getVideoResolution().getHeight());
+            Size videoSize = getVideoResolution();
+            if (videoSize != null) {
+                mMediaRecorder.setVideoSize(videoSize.getWidth(), videoSize.getHeight());
+            }
 
             if (videoFile == null) videoFile = getVideoFile();
             if (videoFile == null) {

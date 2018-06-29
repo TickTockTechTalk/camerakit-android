@@ -22,6 +22,7 @@ public class CameraKitEvent {
     public static final String TYPE_TEXT_DETECTED = "CKTextDetectedEvent";
 
     public static final String TYPE_PREVIEW_READY = "CKPreviewReadyEvent";
+    public static final String TYPE_PREVIEW_CHANGED = "CKPreviewChangedEvent";
 
     private String type;
     private String message;
