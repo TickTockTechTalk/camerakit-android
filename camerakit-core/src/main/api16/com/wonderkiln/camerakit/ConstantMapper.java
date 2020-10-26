@@ -3,8 +3,9 @@ package com.wonderkiln.camerakit;
 import android.annotation.TargetApi;
 import android.hardware.Camera;
 import android.hardware.camera2.CameraCharacteristics;
-import android.support.v4.util.SparseArrayCompat;
 import android.util.SparseIntArray;
+
+import androidx.collection.SparseArrayCompat;
 
 public class ConstantMapper {
 
